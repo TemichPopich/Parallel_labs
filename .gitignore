@@ -1,0 +1,10 @@
+.vscode/
+
+lab 1/
+lab 2/
+
+!lab 1/CMakeLists.txt
+!lab 1/main.cpp
+!lab 2/a.cpp
+!lab 2/b.cpp
+!lab 2/utils.cpp
