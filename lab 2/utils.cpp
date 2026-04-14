@@ -13,9 +13,9 @@ class Utils {
         inline static const vector<int> thread_counts = {2, 4, 6, 8, 10, 12, 14, 16};
 
         inline static const vector<string> output_paths = {
-            "../output/1024x768_shift_blur.png",
-            "../output/1280x960_shift_blur.png",
-            "../output/2048x1536_shift_blur.png"
+            "../output/1024x768.png",
+            "../output/1280x960.png",
+            "../output/2048x1536.png"
         };
 
         inline static const vector<string> image_paths = {
