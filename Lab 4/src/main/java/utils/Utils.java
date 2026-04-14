@@ -1,6 +1,6 @@
 package utils;
 
-import java.util.Set;
+import java.util.List;
 
 public class Utils {
     public static final int PAGE_SIZE = 48;
@@ -13,9 +13,9 @@ public class Utils {
 
     public static final String SUB_LINK_PARSE_PATTERN = "table td:contains(Производитель) + td";
 
-    public static final Set<Integer> THREADS = Set.of(2, 4, 6, 8);
+    public static final List<Integer> THREADS = List.of(2, 4, 6, 8);
 
-    public static final Set<String> BASE_LINKS = Set.of(
+    public static final List<String> BASE_LINKS = List.of(
         "https://mkub.ru/dlja-gostinoj/vitrini-i-bufeti/?limit=48",
         "https://mkub.ru/dlja-gostinoj/mjagkaja-mebel/divani/prjamie-divani/?limit=48",
         "https://mkub.ru/dlja-gostinoj/tumbi-dlja-tv/napolnie-tv-tumbi/?limit=48"
