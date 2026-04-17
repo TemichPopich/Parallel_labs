@@ -13,33 +13,25 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import static utils.Utils.BASE_LINKS;
 import static utils.Utils.RESULT_FILE_NAME;
 
 @Log4j2
 public class Service {
     private final Parser parser = new Parser();
 
-    public void getProducers(final int threadCount) throws InterruptedException {
+    public void getProducers(final int threadCount, final String workerName, final String link)
+        throws InterruptedException {
         final ConcurrentHashMap<String, Integer> result = new ConcurrentHashMap<>();
-        final CopyOnWriteArrayList<String> links = new CopyOnWriteArrayList<>();
 
-        long startTime = 0;
+        long startTime = System.currentTimeMillis();
         long endTime = Long.MAX_VALUE;
+        final CopyOnWriteArrayList<String> links = new CopyOnWriteArrayList<>(parser.parseLinks(link));
 
         try (final ExecutorService executorService = Executors.newFixedThreadPool(threadCount)) {
             startTime = System.currentTimeMillis();
 
-            List<Callable<Void>> baseLinksTasks = BASE_LINKS.stream().map(link -> (Callable<Void>) () -> {
-                List<String> parsedLinks = parser.parseLinks(link);
-                links.addAll(parsedLinks);
-                return null;
-            }).toList();
-
-            executorService.invokeAll(baseLinksTasks);
-
-            List<Callable<Void>> subLinksTasks = links.stream().map(link -> (Callable<Void>) () -> {
-                String producer = parser.parseProducer(link);
+            List<Callable<Void>> subLinksTasks = links.stream().map(l -> (Callable<Void>) () -> {
+                String producer = parser.parseProducer(l);
                 result.merge(producer, 1, Integer::sum);
                 return null;
             }).toList();
@@ -53,7 +45,15 @@ public class Service {
             StringBuilder resultString = new StringBuilder();
             result.forEach((key, value) -> resultString.append(key).append(" : ").append(value).append("\n"));
 
-            File file = new File(RESULT_FILE_NAME.formatted(threadCount));
+            File file = new File(RESULT_FILE_NAME.formatted(
+                Integer.parseInt(workerName), threadCount));
+            File parentDir = file.getParentFile();
+            if (parentDir != null && !parentDir.exists()) {
+                boolean created = parentDir.mkdirs();
+                if (created) {
+                    log.info("Created directory: {}", parentDir.getAbsolutePath());
+                }
+            }
             try (FileWriter writer = new FileWriter(file)) {
                 writer.write(resultString.toString());
             } catch (IOException e) {
@@ -61,7 +61,11 @@ public class Service {
             }
 
             long duration = endTime - startTime;
-            log.info("Execution time: {} milliseconds for {} threads, processed {} links", duration, threadCount, links.size());
+            log.info("Worker {} — Execution time: {} milliseconds for {} threads, processed {} links",
+                workerName,
+                duration,
+                threadCount,
+                links.size());
         }
     }
 }

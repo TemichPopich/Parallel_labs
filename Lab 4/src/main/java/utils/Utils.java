@@ -5,7 +5,7 @@ import java.util.List;
 public class Utils {
     public static final int PAGE_SIZE = 48;
 
-    public static final String RESULT_FILE_NAME = "results/thread_%d_result.txt";
+    public static final String RESULT_FILE_NAME = "results/%d/thread_%d_result.txt";
 
     public static final String PARSE_ERROR_MESSAGE = "Error while parsing links";
 
@@ -20,4 +20,16 @@ public class Utils {
         "https://mkub.ru/dlja-gostinoj/mjagkaja-mebel/divani/prjamie-divani/?limit=48",
         "https://mkub.ru/dlja-gostinoj/tumbi-dlja-tv/napolnie-tv-tumbi/?limit=48"
     );
+
+    public static boolean isNumeric(String strNum) {
+        if (strNum == null) {
+            return false;
+        }
+        try {
+            Integer.parseInt(strNum);
+        } catch (NumberFormatException nfe) {
+            return false;
+        }
+        return true;
+    }
 }

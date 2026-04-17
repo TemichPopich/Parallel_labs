@@ -2,7 +2,10 @@
 
 lab 1/
 lab 2/
-lab 3/
+lab 3/report
+Lab 4/results
+Lab 4/.idea
+Lab 4/target
 
 !lab 1/CMakeLists.txt
 !lab 1/main.cpp

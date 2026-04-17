@@ -33,7 +33,10 @@ public class Parser {
     private Optional<Document> getDocOpt(final String link) {
         Optional<Document> docOpt;
         try {
-            docOpt = Optional.of(Jsoup.connect(link).get());
+            docOpt = Optional.of(Jsoup.connect(link)
+                .userAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36...")
+                .timeout(10000)
+                .get());
         } catch (IOException e) {
             throw new RuntimeException(PARSE_ERROR_MESSAGE);
         }
